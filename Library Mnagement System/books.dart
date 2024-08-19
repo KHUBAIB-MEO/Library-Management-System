@@ -46,6 +46,13 @@ void add_books() {
   while (true) {
     print("Enter books id");
     int id = int.parse(stdin.readLineSync()!);
+    for (var check_id in info) {
+      if (check_id.containsKey(id)) {
+        print("Id is present already");
+        print("Please enter new id");
+        add_books();
+      }
+    }
     print("Enter books name");
     String book_name = stdin.readLineSync()!;
     print("Enter author name");
