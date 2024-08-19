@@ -1,15 +1,16 @@
 import 'dart:io';
+import 'display.dart';
 import 'main.dart';
 
 void books() {
   print("Enter 1 for Add books");
   print("Enter 2 for Delete books");
   print("Enter 3 for Show books");
-  print("Enter 4 for Borrow books");
-  print("Enter 5 for Show borrow  books");
-  print("Enter 6 for search books");
+  print("Enter 4 for Show borrow  books");
+  print("Enter 5 for search books");
   print("Enter 0 for Log out");
   int choice = int.parse(stdin.readLineSync()!);
+  // FUNCTION CHOICE //
   switch (choice) {
     case 1:
       add_books();
@@ -27,9 +28,6 @@ void books() {
       break;
 
     case 5:
-      break;
-
-    case 6:
       search_books();
       break;
 
@@ -44,8 +42,10 @@ void books() {
 //---------------------------------- ADD BOOKS FUNCTION ------------------------------------//
 void add_books() {
   while (true) {
+    // TAKE BOOK INFORMATION FROM USER //
     print("Enter books id");
     int id = int.parse(stdin.readLineSync()!);
+    // CHECK IF ID IS ALREADY PRESENT //
     for (var check_id in info) {
       if (check_id.containsKey(id)) {
         print("Id is present already");
@@ -61,6 +61,8 @@ void add_books() {
     String published_date = stdin.readLineSync()!;
     print("Enter Quantity of books");
     int quantity = int.parse(stdin.readLineSync()!);
+
+    // ADD DATA IN MAP //
     info.add({
       id: {
         "Name": book_name,
@@ -69,13 +71,16 @@ void add_books() {
         "Quantity": quantity
       }
     });
+
     print("Enter 1 for add another book");
     print("Enter 0 for back");
     while (true) {
       int again = int.parse(stdin.readLineSync()!);
+      // ADD ANOTHER BOOK //
       if (again == 1) {
         add_books();
       }
+      // BACK //
       if (again == 0) {
         books();
       } else {
@@ -87,12 +92,15 @@ void add_books() {
 
 //---------------------------------- SEARCH BOOKS FUNCTION ------------------------------------//
 void search_books() {
+  // CHECK IF MAP IS EMPTY OR NOT //
   if (info.isEmpty) {
     print("No book found");
   } else {
+    // ID FOR SEARCH //
     print("Enter id of book you want search");
     var input = stdin.readLineSync()!;
     int? id = int.parse(input);
+    // PRINT BOOK INFORMATION //
     for (var map in info) {
       if (map.containsKey(id)) {
         print("Book id is : $id");
@@ -108,6 +116,7 @@ void search_books() {
     stdin.readLineSync();
     books();
   }
+  // BACK //
   print("Press 0 for back");
   while (true) {
     var choice = stdin.readLineSync()!;
@@ -122,9 +131,11 @@ void search_books() {
 //---------------------------------- SHOW BOOKS FUNCTION ------------------------------------//
 void show_books() {
   var id;
+  // CHECK IF MAP IS EMPTY OR NOT //
   if (info.isEmpty) {
     print("No book found");
   } else {
+    // PRINT BOOK INFORMATION //
     for (var map in info) {
       id = map.keys.first;
       var bookdetails = map[id];
@@ -137,6 +148,7 @@ void show_books() {
           "\n-------------------------------------------------------------------------------\n");
     }
   }
+  // BACK //
   print("Press 0 for back");
   while (true) {
     var choice = stdin.readLineSync()!;
@@ -150,11 +162,14 @@ void show_books() {
 
 //---------------------------------- DELETE BOOKS FUNCTION ------------------------------------//
 void delete_books() {
+  // CHECK IF MAP IS EMPTY OR NOT //
   if (info.isEmpty) {
     print("No book is available to delete");
   } else {
+    // ID FOR SEARCH //
     print("Enter book id ");
     int id = int.parse(stdin.readLineSync()!);
+    // CODE FOR DELETE BOOK //
     for (int i = 0; i < info.length; i++) {
       if (info[i].containsKey(id)) {
         info.removeAt(i);
@@ -167,11 +182,65 @@ void delete_books() {
     stdin.readLineSync();
     books();
   }
+  // BACK //
   print("Press 0 for back");
   while (true) {
     var choice = stdin.readLineSync()!;
     if (choice == 0 || choice == "0") {
       books();
+    } else {
+      print("Invalid input try again");
+    }
+  }
+}
+
+//---------------------------------- BORROW BOOKS FUNCTION ------------------------------------//
+void borrow_book() {
+  if (info.isEmpty) {
+    print("No book found");
+  } else {
+    // ID FOR SEARCH //
+    print("Enter id of book you want search");
+    var input = stdin.readLineSync()!;
+    int? id = int.parse(input);
+    // PRINT BOOK INFORMATION //
+    for (var map in info) {
+      if (map.containsKey(id)) {
+        print("Book id is : $id");
+        print("Book name is : ${map[id]!["Name"]}");
+        print("Book's author name is : ${map[id]!["Author"]}");
+        print("Book published date is : ${map[id]!["Published Date"]}");
+        stdin.readLineSync();
+        print("\nPress 1 for borrow book");
+        print("\nPress 0 for back");
+        while (true) {
+          var borrow_choice = stdin.readLineSync()!;
+          if (borrow_choice == "1") {
+            if (map[id]!["Quantity"] > 0) {
+              map[id]!["Quantity"] = map[id]!["Quantity"] - 1;
+            } else {
+              print("Books is out of stock");
+              stdin.readLineSync();
+              student_dispaly();
+            }
+          } else if (borrow_choice == "0") {
+            student_dispaly();
+          } else {
+            print("Invalid input try again");
+          }
+        }
+      }
+    }
+    print("Book not found");
+    stdin.readLineSync();
+    student_dispaly();
+  }
+  // BACK //
+  print("Press 0 for back");
+  while (true) {
+    var choice = stdin.readLineSync()!;
+    if (choice == 0 || choice == "0") {
+      student_dispaly();
     } else {
       print("Invalid input try again");
     }
