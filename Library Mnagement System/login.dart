@@ -63,12 +63,6 @@ void admin_login() {
 
 //--------------------------------------- STUDENT LOGIN FUNCTION ---------------------------------------//
 void student_login() {
-  List<Map<String, int>> information_of_student = [
-    {"HUZAIFA": 1111},
-    {"UZAIR": 2222},
-    {"MAZZ": 3333},
-    {"UMER": 4444}
-  ];
   print("Enter username");
   while (true) {
     String User_name = stdin.readLineSync()!;
@@ -76,15 +70,15 @@ void student_login() {
       main();
     }
     User_name = User_name.toUpperCase();
-    for (int i = 0; i < information_of_student.length; i++) {
-      if (information_of_student[i].containsKey(User_name)) {
+    for (var student in information_of_student) {
+      if (student.containsKey(User_name)) {
         print("Enter password");
         while (true) {
           int pass = int.parse(stdin.readLineSync()!);
           if (pass == 0) {
             main();
           }
-          if (information_of_student[i].containsValue(pass)) {
+          if (student[User_name]!["ID"] == pass) {
             student_dispaly();
           } else {
             print("Wrong password");

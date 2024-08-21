@@ -10,10 +10,11 @@ void student_dispaly() {
     var choice = stdin.readLineSync()!;
     switch (choice) {
       case "1":
-        show_books();
+        show_book_for_student();
         break;
 
       case "2":
+        borrow_book();
         break;
 
       case "0":
